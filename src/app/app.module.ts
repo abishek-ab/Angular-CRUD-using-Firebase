@@ -3,6 +3,11 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { AuthInterceptorService } from './auth-interceptor';
+import { LoggingInterceptorService } from './logging-interceptor';
+
 
 @NgModule({
   declarations: [
@@ -10,9 +15,21 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [{
+    provide:HTTP_INTERCEPTORS,
+    useClass:AuthInterceptorService,
+    multi:true
+  },
+  {
+    provide:HTTP_INTERCEPTORS,
+    useClass:LoggingInterceptorService,
+    multi:true
+  }
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
